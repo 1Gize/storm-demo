@@ -1,6 +1,6 @@
 package com.adform.scalaacademy.storm.bolt
 
-import com.adform.scalaacademy.storm.TopologyTuples
+import com.adform.scalaacademy.storm.spout.Tuples
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.storm.task.{OutputCollector, TopologyContext}
 import org.apache.storm.topology.OutputFieldsDeclarer
@@ -22,8 +22,8 @@ class PrinterBolt extends BaseRichBolt with LazyLogging {
   }
 
   override def execute(input: Tuple): Unit = {
-    if (input.contains(TopologyTuples.Message)) {
-      input.getValueByField(TopologyTuples.Message) match {
+    if (input.contains(Tuples.Message)) {
+      input.getValueByField(Tuples.Message) match {
         case msg =>
           logger.info(s"""
              |Received message:
@@ -33,12 +33,12 @@ class PrinterBolt extends BaseRichBolt with LazyLogging {
           collector.ack(input)
       }
     } else {
-      logger.error(s"Received $input that do not contains '${TopologyTuples.Message}' field. Skipping message")
+      logger.error(s"Received $input that do not contains '${Tuples.Message}' field. Skipping message")
       collector.ack(input)
     }
   }
 
   override def declareOutputFields(declarer: OutputFieldsDeclarer): Unit = {
-    declarer.declare(TopologyTuples.defaultFields)
+    declarer.declare(Tuples.defaultFields)
   }
 }
