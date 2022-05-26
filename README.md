@@ -1,1 +1,1 @@
-# storm-demo
+# Scala academy Apache Storm
